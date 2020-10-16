@@ -73,9 +73,7 @@
               <div class="card-body">
                 <h2>You've seen all the animals in your area!</h2>
 
-                <h4>
-                  Click below for more information on your favorites!
-                </h4>
+                <h4>Click below for more information on your favorites!</h4>
                 <router-link
                   class="text-light d-flex justify-content-center"
                   :to="{ name: 'Profile' }"
@@ -159,7 +157,7 @@ export default {
     },
   },
   watch: {
-    profile: function(userProfile) {
+    profile: function (userProfile) {
       if (userProfile.search.state) {
         this.$store.dispatch("getResource", {
           path: "animals?contact.address.state=" + userProfile.search.state,
@@ -175,7 +173,7 @@ export default {
         router.push({ name: "Home" });
       }
     },
-    animals: function(animals) {
+    animals: function (animals) {
       let newAnimals = this.animals;
       for (let a = 0; a < animals.length; a++) {
         for (let f = 0; f < this.favorites.length; f++) {

@@ -7,6 +7,11 @@ import { Auth0Plugin, onAuth } from "@bcwdev/auth0-vue";
 import { domain, clientId, audience } from "./authConfig";
 // @ts-ignore
 import { VueHammer } from "vue2-hammer";
+import VueTour from 'vue-tour';
+
+require('vue-tour/dist/vue-tour.css')
+
+Vue.use(VueTour)
 
 Vue.use(Auth0Plugin, {
   domain,
@@ -24,7 +29,7 @@ Vue.use(Auth0Plugin, {
 new Vue({
   router,
   store,
-  render: function(h) {
+  render: function (h) {
     return h(App);
   },
 }).$mount("#app");

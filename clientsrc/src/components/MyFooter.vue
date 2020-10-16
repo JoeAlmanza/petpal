@@ -4,7 +4,7 @@
       <div
         class="profile col-6 d-flex justify-content-center profile-link align-items-center"
       >
-        <router-link class="text-light" :to="{ name: 'Profile' }">
+        <router-link class="text-light profileImg" :to="{ name: 'Profile' }">
           <i class="fa fa-user text-light fa-3x" aria-hidden="true"></i>
         </router-link>
       </div>
@@ -39,5 +39,13 @@ export default {
 .cardImg {
   max-height: 7vh;
   color: white;
+}
+
+.cardImg:active {
+  transform: translateY(2px);
+}
+
+.profileImg:active {
+  transform: translateY(2px);
 }
 </style>

@@ -4,7 +4,13 @@ import VueRouter from "vue-router";
 import Home from "../Pages/Home.vue";
 // @ts-ignore
 import Profile from "../Pages/Profile.vue";
+// @ts-ignore
+import Swipe from "../Pages/Swipe.vue";
+// @ts-ignore
+import PetDetails from "../Pages/PetDetails.vue";
 import { authGuard } from "@bcwdev/auth0-vue";
+import { api } from "../store/AxiosService.js";
+import store from "../store/index.js";
 
 Vue.use(VueRouter);
 
@@ -18,6 +24,18 @@ const routes = [
     path: "/profile",
     name: "Profile",
     component: Profile,
+    beforeEnter: authGuard,
+  },
+  {
+    path: "/swipepage",
+    name: "Swipe",
+    component: Swipe,
+    beforeEnter: authGuard,
+  },
+  {
+    path: "/petdetails/:id",
+    name: "PetDetails",
+    component: PetDetails,
     beforeEnter: authGuard,
   },
 ];

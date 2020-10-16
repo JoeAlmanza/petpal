@@ -11,7 +11,7 @@ async function createProfileIfNeeded(profile, user) {
   if (!profile) {
     profile = await dbContext.Profile.create({
       ...user,
-      subs: [user.sub]
+      subs: [user.sub],
     });
   }
   return profile;
@@ -34,9 +34,15 @@ async function mergeSubsIfNeeded(profile, user) {
  * @param {any} body
  */
 function sanitizeBody(body) {
+  delete body.email;
+  delete body.subs;
+  // delete body.hasOrg;
+  return body;
+}
+
+function sanitizeForOrg(body) {
   let writable = {
-    name: body.name,
-    picture: body.picture
+    hasOrg: body.hasOrg,
   };
   return writable;
 }
@@ -48,7 +54,7 @@ class ProfileService {
    */
   async getProfiles(emails = []) {
     let profiles = await dbContext.Profile.find({
-      email: { $in: emails }
+      email: { $in: emails },
     }).select("email picture name");
     return profiles;
   }
@@ -63,23 +69,36 @@ class ProfileService {
    */
   async getProfile(user) {
     let profile = await dbContext.Profile.findOne({
-      email: user.email
+      email: user.email,
     });
     profile = await createProfileIfNeeded(profile, user);
     await mergeSubsIfNeeded(profile, user);
+
+    // profile.favorites = favoriteService.getByProfileId(profile.id)
+
     return profile;
   }
   /**
-​    * Updates profile with the request body, will only allow changes to editable fields
-​    * @param {any} user Auth0 user object
-​    * @param {any} body Updates to apply to user object
-​    */
+   * Updates profile with the request body, will only allow changes to editable fields
+   * @param {any} user Auth0 user object
+   * @param {any} body Updates to apply to user object
+   */
   async updateProfile(user, body) {
     let update = sanitizeBody(body);
     let profile = await dbContext.Profile.findOneAndUpdate(
       { email: user.email },
       { $set: update },
-      { runValidators: true, setDefaultsOnInsert: true, new: true }
+      { runValidators: true, new: true }
+    );
+    return profile;
+  }
+
+  async updateOrg(user, body) {
+    let update = sanitizeForOrg(body);
+    let profile = await dbContext.Profile.findOneAndUpdate(
+      { email: user.email },
+      { $set: update },
+      { runValidators: true, new: true }
     );
     return profile;
   }

@@ -4,3 +4,15 @@
   border-color: darken($color: $primary, $amount: 10);
   border-width: medium;
 }
+.btn-success {
+  color: $light;
+  background-color: $success;
+  border-color: darken($color: $success, $amount: 10);
+  border-width: medium;
+}
+.btn-danger {
+  color: $light;
+  background-color: $danger;
+  border-color: darken($color: $danger, $amount: 10);
+  border-width: medium;
+}

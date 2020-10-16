@@ -4,18 +4,17 @@ import express from "express";
 import helmet from "helmet";
 import { RegisterControllers, Paths } from "../Setup";
 import auth0Provider from "@bcwdev/auth0provider";
-import cleanupService from "./services/TestCleanupService";
 
 export default class Startup {
   static ConfigureGlobalMiddleware(app) {
     // NOTE Configure and Register Middleware
     let whitelist = ["http://localhost:8080"];
     let corsOptions = {
-      origin: function(origin, callback) {
+      origin: function (origin, callback) {
         let originIsWhitelisted = whitelist.indexOf(origin) !== -1;
         callback(null, originIsWhitelisted);
       },
-      credentials: true
+      credentials: true,
     };
     app.use(helmet());
     app.use(cors(corsOptions));
@@ -25,7 +24,7 @@ export default class Startup {
     auth0Provider.configure({
       domain: process.env.AUTH_DOMAIN,
       clientId: process.env.AUTH_CLIENT_ID,
-      audience: process.env.AUTH_AUDIENCE
+      audience: process.env.AUTH_AUDIENCE,
     });
   }
   static ConfigureRoutes(app) {
@@ -33,14 +32,6 @@ export default class Startup {
     RegisterControllers(router);
     app.use(router);
     app.use("", express.static(Paths.Public));
-    app.get("/cleanup", async (req, res, next) => {
-      try {
-        let data = await cleanupService.cleanupAsync();
-        res.send(data);
-      } catch (e) {
-        next(e);
-      }
-    });
     Startup.registerErrorHandlers(app);
   }
 
@@ -62,7 +53,12 @@ export default class Startup {
       if (error.status == 500) {
         console.error(error); // should write to external
       }
-      res.status(error.status).send({ error: { message: error.toString(), status: error.status }, url: req.url });
+      res
+        .status(error.status)
+        .send({
+          error: { message: error.toString(), status: error.status },
+          url: req.url,
+        });
     });
   }
 }

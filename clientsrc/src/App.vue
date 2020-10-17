@@ -12,6 +12,10 @@ import MyFooter from "@/components/MyFooter";
 import { onAuth } from "@bcwdev/auth0-vue";
 export default {
   name: "App",
+  mounted() {},
+  data() {
+    return {};
+  },
   async beforeCreate() {
     await onAuth();
     if (this.$auth.isAuthenticated) {

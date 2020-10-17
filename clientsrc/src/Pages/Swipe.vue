@@ -6,6 +6,7 @@
       >
         <div class="text-left p-0">
           <img
+            id="v-step-0"
             src="../assets/brokenheart.png"
             class="heartButton"
             @click="nextPet"
@@ -98,6 +99,7 @@
         <i class="paw-loading fa fa-paw fa-spin" aria-hidden="true"></i>
       </div>
     </article>
+    <v-tour name="myTour" :steps="steps"></v-tour>
   </section>
 </template>
 
@@ -105,6 +107,7 @@
 // import SwipeCardComp from "../components/SwipeCardComp.vue";
 import { Vue2InteractDraggable } from "vue2-interact";
 import { onAuth } from "@bcwdev/auth0-vue";
+import VueTour from "vue-tour";
 import router from "../router";
 export default {
   name: "Swipe",
@@ -114,9 +117,31 @@ export default {
       interactLockSwipeUp: true,
       interactLockSwipeDown: true,
       favAnimal: {},
+      steps: [
+        {
+          target: "#v-step-0", // We're using document.querySelector() under the hood
+          header: {
+            title: "Get Started",
+          },
+          content: `Discover <strong>Vue Tour</strong>!`,
+        },
+        {
+          target: ".v-step-1",
+          content: "An awesome plugin made with Vue.js!",
+        },
+        {
+          target: '[data-v-step="2"]',
+          content:
+            "Try it, you'll love it!<br>You can put HTML in the steps and completely customize the DOM to suit your needs.",
+          params: {
+            placement: "top", // Any valid Popper.js placement. See https://popper.js.org/popper-documentation.html#Popper.placements
+          },
+        },
+      ],
     };
   },
   mounted() {
+    this.$tours["myTour"].start();
     this.$store.dispatch("getProfile", {
       getPath: "profile",
       path: "profile/",
